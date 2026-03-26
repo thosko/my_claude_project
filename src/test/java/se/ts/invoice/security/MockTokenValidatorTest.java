@@ -94,6 +94,15 @@ class MockTokenValidatorTest {
     }
 
     @Test
+    void validate_employeeRole_returnsCorrectClaims() {
+        // when
+        TokenClaims claims = validator.validate("tenant-abc|user-1|EMPLOYEE");
+
+        // then
+        assertThat(claims.roles()).containsExactly(Role.EMPLOYEE);
+    }
+
+    @Test
     void validate_unknownRole_throwsBadCredentialsException() {
         assertThatThrownBy(() -> validator.validate("tenant-abc|user-1|SUPERUSER"))
                 .isInstanceOf(BadCredentialsException.class)

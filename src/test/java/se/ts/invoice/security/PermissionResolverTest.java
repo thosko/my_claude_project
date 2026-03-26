@@ -30,6 +30,7 @@ class PermissionResolverTest {
         assertThat(authorityNames(authorities))
                 .containsExactlyInAnyOrder(
                         Permission.INVOICE_READ.name(),
+                        Permission.INVOICE_READ_ALL.name(),
                         Permission.INVOICE_CREATE.name(),
                         Permission.INVOICE_UPDATE.name(),
                         Permission.INVOICE_DELETE.name()
@@ -37,18 +38,18 @@ class PermissionResolverTest {
     }
 
     @Test
-    void resolveAuthorities_managerRole_grantsReadCreateUpdate_notDelete() {
+    void resolveAuthorities_managerRole_grantsReadAllCreateUpdate_notDeleteOrRestrictedRead() {
         // when
         Collection<GrantedAuthority> authorities = resolver.resolveAuthorities(Set.of(Role.MANAGER));
 
         // then
         assertThat(authorityNames(authorities))
                 .containsExactlyInAnyOrder(
-                        Permission.INVOICE_READ.name(),
+                        Permission.INVOICE_READ_ALL.name(),
                         Permission.INVOICE_CREATE.name(),
                         Permission.INVOICE_UPDATE.name()
                 )
-                .doesNotContain(Permission.INVOICE_DELETE.name());
+                .doesNotContain(Permission.INVOICE_DELETE.name(), Permission.INVOICE_READ.name());
     }
 
     @Test
@@ -71,14 +72,14 @@ class PermissionResolverTest {
 
     @Test
     void resolveAuthorities_multipleRoles_returnsUnionOfPermissions() {
-        // given — USER has none, MANAGER adds READ/CREATE/UPDATE
+        // given — USER has none, MANAGER adds READ_ALL/CREATE/UPDATE
         // when
         Collection<GrantedAuthority> authorities = resolver.resolveAuthorities(Set.of(Role.USER, Role.MANAGER));
 
         // then
         assertThat(authorityNames(authorities))
                 .containsExactlyInAnyOrder(
-                        Permission.INVOICE_READ.name(),
+                        Permission.INVOICE_READ_ALL.name(),
                         Permission.INVOICE_CREATE.name(),
                         Permission.INVOICE_UPDATE.name()
                 );
@@ -86,15 +87,15 @@ class PermissionResolverTest {
 
     @Test
     void resolveAuthorities_overlappingRoles_deduplicatesPermissions() {
-        // given — ADMIN and MANAGER both grant INVOICE_READ; should appear only once
+        // given — ADMIN and MANAGER both grant INVOICE_READ_ALL; should appear only once
         // when
         Collection<GrantedAuthority> authorities = resolver.resolveAuthorities(Set.of(Role.ADMIN, Role.MANAGER));
 
         // then
-        long readCount = authorities.stream()
-                .filter(a -> a.getAuthority().equals(Permission.INVOICE_READ.name()))
+        long readAllCount = authorities.stream()
+                .filter(a -> a.getAuthority().equals(Permission.INVOICE_READ_ALL.name()))
                 .count();
-        assertThat(readCount).isEqualTo(1);
+        assertThat(readAllCount).isEqualTo(1);
     }
 
     private Set<String> authorityNames(Collection<GrantedAuthority> authorities) {

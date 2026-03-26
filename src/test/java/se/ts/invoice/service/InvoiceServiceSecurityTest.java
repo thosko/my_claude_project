@@ -77,8 +77,8 @@ class InvoiceServiceSecurityTest {
 
     @Test
     void createInvoice_withNoAuthorities_throwsAccessDeniedException() {
-        // given — empty security context, no authorities
-        SecurityContextHolder.clearContext();
+        // given — authenticated user with no granted authorities
+        authenticateWithAuthority(/* none — empty list */ null);
 
         // when / then
         assertThatThrownBy(() -> invoiceService.createInvoice(
@@ -102,9 +102,10 @@ class InvoiceServiceSecurityTest {
     }
 
     private void authenticateWithAuthority(String authority) {
+        var authorities = authority != null
+                ? List.of(new SimpleGrantedAuthority(authority))
+                : List.<SimpleGrantedAuthority>of();
         SecurityContextHolder.getContext().setAuthentication(
-                new UsernamePasswordAuthenticationToken(
-                        "user", null,
-                        List.of(new SimpleGrantedAuthority(authority))));
+                new UsernamePasswordAuthenticationToken("user", null, authorities));
     }
 }

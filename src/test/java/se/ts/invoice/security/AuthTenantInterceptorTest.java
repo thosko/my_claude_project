@@ -44,7 +44,6 @@ class AuthTenantInterceptorTest {
     @BeforeEach
     void setUp() {
         interceptor = new AuthTenantInterceptor(tokenValidator, permissionResolver);
-        when(permissionResolver.resolveAuthorities(any())).thenReturn(Set.of());
     }
 
     @AfterEach
@@ -106,6 +105,7 @@ class AuthTenantInterceptorTest {
         Metadata headers = headersWithToken("tenant-abc|user-1|ADMIN");
         TokenClaims claims = new TokenClaims("user-1", "tenant-abc", Set.of(Role.ADMIN));
         when(tokenValidator.validate("tenant-abc|user-1|ADMIN")).thenReturn(claims);
+        when(permissionResolver.resolveAuthorities(any())).thenReturn(Set.of());
         when(serverCallHandler.startCall(any(), any())).thenReturn(new ServerCall.Listener<>() { });
 
         // when
@@ -122,6 +122,7 @@ class AuthTenantInterceptorTest {
         Metadata headers = headersWithToken("tenant-abc|user-1|ADMIN");
         TokenClaims claims = new TokenClaims("user-1", "tenant-abc", Set.of(Role.ADMIN));
         when(tokenValidator.validate(any())).thenReturn(claims);
+        when(permissionResolver.resolveAuthorities(any())).thenReturn(Set.of());
         when(serverCallHandler.startCall(any(), any())).thenReturn(new ServerCall.Listener<>() { });
 
         // when
@@ -132,17 +133,20 @@ class AuthTenantInterceptorTest {
     }
 
     @Test
-    void interceptCall_validToken_setsSecurityContextOnHalfClose() {
+    void interceptCall_validToken_setsTenantContextOnHalfClose() {
         // given
         Metadata headers = headersWithToken("tenant-abc|user-1|ADMIN");
         TokenClaims claims = new TokenClaims("user-1", "tenant-abc", Set.of(Role.ADMIN));
         when(tokenValidator.validate(any())).thenReturn(claims);
+        when(permissionResolver.resolveAuthorities(any())).thenReturn(Set.of());
 
         String[] capturedTenantId = {null};
-        when(serverCallHandler.startCall(any(), any())).thenAnswer(inv -> {
-            // verify context is set when the downstream handler is invoked
-            capturedTenantId[0] = TenantContext.getTenantId();
-            return new ServerCall.Listener<>() { };
+        // Capture inside the delegate's onHalfClose — that's where runWithContext is active
+        when(serverCallHandler.startCall(any(), any())).thenReturn(new ServerCall.Listener<>() {
+            @Override
+            public void onHalfClose() {
+                capturedTenantId[0] = TenantContext.getTenantId();
+            }
         });
 
         // when
@@ -160,6 +164,7 @@ class AuthTenantInterceptorTest {
         Metadata headers = headersWithToken("tenant-abc|user-1|ADMIN");
         TokenClaims claims = new TokenClaims("user-1", "tenant-abc", Set.of(Role.ADMIN));
         when(tokenValidator.validate(any())).thenReturn(claims);
+        when(permissionResolver.resolveAuthorities(any())).thenReturn(Set.of());
         when(serverCallHandler.startCall(any(), any())).thenReturn(new ServerCall.Listener<>() { });
 
         // when

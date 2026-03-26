@@ -9,8 +9,11 @@ package se.ts.invoice.domain.security;
  */
 public enum Permission {
 
-    /** Allows reading/viewing an invoice. */
+    /** Allows reading own tenant's invoices (EMPLOYEE level — restricted scope). */
     INVOICE_READ,
+
+    /** Allows reading all invoices within the tenant (MANAGER level — full scope). */
+    INVOICE_READ_ALL,
 
     /** Allows creating a new invoice. */
     INVOICE_CREATE,

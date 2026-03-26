@@ -11,6 +11,7 @@ class RoleTest {
         assertThat(Role.ADMIN.getPermissions())
                 .containsExactlyInAnyOrder(
                         Permission.INVOICE_READ,
+                        Permission.INVOICE_READ_ALL,
                         Permission.INVOICE_CREATE,
                         Permission.INVOICE_UPDATE,
                         Permission.INVOICE_DELETE
@@ -18,14 +19,26 @@ class RoleTest {
     }
 
     @Test
-    void manager_hasReadCreateUpdate_butNotDelete() {
+    void manager_hasReadAllCreateUpdate_butNotDeleteOrRestrictedRead() {
         assertThat(Role.MANAGER.getPermissions())
                 .containsExactlyInAnyOrder(
-                        Permission.INVOICE_READ,
+                        Permission.INVOICE_READ_ALL,
                         Permission.INVOICE_CREATE,
                         Permission.INVOICE_UPDATE
                 )
-                .doesNotContain(Permission.INVOICE_DELETE);
+                .doesNotContain(Permission.INVOICE_DELETE, Permission.INVOICE_READ);
+    }
+
+    @Test
+    void employee_hasRestrictedReadOnly() {
+        assertThat(Role.EMPLOYEE.getPermissions())
+                .containsExactly(Permission.INVOICE_READ)
+                .doesNotContain(
+                        Permission.INVOICE_READ_ALL,
+                        Permission.INVOICE_CREATE,
+                        Permission.INVOICE_UPDATE,
+                        Permission.INVOICE_DELETE
+                );
     }
 
     @Test

@@ -20,12 +20,15 @@ public enum Role {
     /** Full access to all invoice operations. */
     ADMIN(EnumSet.allOf(Permission.class)),
 
-    /** Can read, create and update invoices but cannot delete. */
+    /** Can read all invoices, create and update — but cannot delete. */
     MANAGER(EnumSet.of(
-            Permission.INVOICE_READ,
+            Permission.INVOICE_READ_ALL,
             Permission.INVOICE_CREATE,
             Permission.INVOICE_UPDATE
     )),
+
+    /** Can read own-scope invoices only. */
+    EMPLOYEE(EnumSet.of(Permission.INVOICE_READ)),
 
     /** No invoice permissions granted by default. */
     USER(EnumSet.noneOf(Permission.class));
