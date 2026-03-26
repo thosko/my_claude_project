@@ -1,0 +1,160 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+    "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+    "https://checkstyle.org/dtds/configuration_1_3.dtd">
+
+<!--
+    Checkstyle configuration based on CLAUDE.md project guidelines
+-->
+<module name="Checker">
+    <property name="charset" value="UTF-8"/>
+    <property name="severity" value="error"/>
+
+    <!-- File-level checks -->
+    <module name="FileTabCharacter">
+        <property name="eachLine" value="true"/>
+    </module>
+
+    <module name="TreeWalker">
+
+        <!-- =================================================================== -->
+        <!-- Naming Conventions (from CLAUDE.md)                                 -->
+        <!-- - Classes: PascalCase                                               -->
+        <!-- - Methods/variables: camelCase                                      -->
+        <!-- - Constants: UPPER_SNAKE_CASE                                       -->
+        <!-- - Packages: lowercase                                               -->
+        <!-- =================================================================== -->
+
+        <!-- Classes: PascalCase -->
+        <module name="TypeName">
+            <property name="format" value="^[A-Z][a-zA-Z0-9]*$"/>
+            <message key="name.invalidPattern"
+                     value="Class name ''{0}'' must be PascalCase (start with uppercase, alphanumeric only)."/>
+        </module>
+
+        <!-- Methods: camelCase -->
+        <module name="MethodName">
+            <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
+            <message key="name.invalidPattern"
+                     value="Method name ''{0}'' must be camelCase (start with lowercase)."/>
+        </module>
+
+        <!-- Variables: camelCase -->
+        <module name="LocalVariableName">
+            <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
+            <message key="name.invalidPattern"
+                     value="Local variable ''{0}'' must be camelCase."/>
+        </module>
+
+        <module name="MemberName">
+            <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
+            <message key="name.invalidPattern"
+                     value="Member variable ''{0}'' must be camelCase."/>
+        </module>
+
+        <module name="ParameterName">
+            <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
+            <message key="name.invalidPattern"
+                     value="Parameter ''{0}'' must be camelCase."/>
+        </module>
+
+        <!-- Constants: UPPER_SNAKE_CASE -->
+        <module name="ConstantName">
+            <property name="format" value="^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$"/>
+            <message key="name.invalidPattern"
+                     value="Constant ''{0}'' must be UPPER_SNAKE_CASE."/>
+        </module>
+
+        <!-- Packages: lowercase -->
+        <module name="PackageName">
+            <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$"/>
+            <message key="name.invalidPattern"
+                     value="Package name ''{0}'' must be all lowercase (e.g., com.yourcompany.module)."/>
+        </module>
+
+        <!-- =================================================================== -->
+        <!-- Coding Standards (from CLAUDE.md)                                   -->
+        <!-- - All public methods must have Javadoc comments                     -->
+        <!-- - No magic numbers — use named constants                            -->
+        <!-- =================================================================== -->
+
+        <!-- All public methods must have Javadoc comments -->
+        <module name="MissingJavadocMethod">
+            <property name="scope" value="public"/>
+            <property name="allowMissingPropertyJavadoc" value="true"/>
+            <property name="tokens" value="METHOD_DEF, ANNOTATION_FIELD_DEF"/>
+        </module>
+
+        <module name="JavadocMethod">
+            <property name="accessModifiers" value="public"/>
+        </module>
+
+        <!-- No magic numbers — use named constants -->
+        <module name="MagicNumber">
+            <property name="ignoreNumbers" value="-1, 0, 1, 2"/>
+            <property name="ignoreHashCodeMethod" value="true"/>
+            <property name="ignoreAnnotation" value="true"/>
+            <message key="magic.number"
+                     value="Magic number ''{0}'' should be a named constant."/>
+        </module>
+
+        <!-- =================================================================== -->
+        <!-- Error Handling (from CLAUDE.md)                                     -->
+        <!-- - Never swallow exceptions silently                                 -->
+        <!-- =================================================================== -->
+
+        <!-- Never swallow exceptions silently (empty catch blocks) -->
+        <module name="EmptyCatchBlock">
+            <property name="exceptionVariableName" value="expected|ignore"/>
+            <message key="catch.block.empty"
+                     value="Empty catch block. Never swallow exceptions silently."/>
+        </module>
+
+        <!-- =================================================================== -->
+        <!-- SOLID Principles Support                                            -->
+        <!-- =================================================================== -->
+
+        <!-- Encourage small, focused classes (Single Responsibility) -->
+        <module name="MethodCount">
+            <property name="maxTotal" value="30"/>
+        </module>
+
+        <module name="MethodLength">
+            <property name="max" value="50"/>
+        </module>
+
+        <!-- Limit class fan-out complexity (Dependency Inversion) -->
+        <module name="ClassFanOutComplexity">
+            <property name="max" value="20"/>
+        </module>
+
+        <!-- =================================================================== -->
+        <!-- Composition over Inheritance Support                                -->
+        <!-- =================================================================== -->
+
+        <!-- Limit inheritance depth -->
+        <module name="ClassDataAbstractionCoupling">
+            <property name="max" value="10"/>
+        </module>
+
+        <!-- =================================================================== -->
+        <!-- General Code Quality                                                -->
+        <!-- =================================================================== -->
+
+        <!-- Avoid unused imports -->
+        <module name="UnusedImports"/>
+
+        <!-- Avoid star imports -->
+        <module name="AvoidStarImport"/>
+
+        <!-- One statement per line -->
+        <module name="OneStatementPerLine"/>
+
+        <!-- Proper modifier order -->
+        <module name="ModifierOrder"/>
+
+        <!-- Require braces for control statements -->
+        <module name="NeedBraces"/>
+
+    </module>
+</module>

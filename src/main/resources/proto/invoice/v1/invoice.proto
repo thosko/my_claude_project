@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package se.kleer.invoice.v1;
+
+option java_multiple_files = true;
+option java_package = "se.kleer.invoice.v1.proto";
+option java_outer_classname = "InvoiceServiceProto";
+
+import "invoice/v1/invoice_resource.proto";
+
+// Service for managing invoices
+service InvoiceService {
+
+  // Creates a new invoice
+  rpc CreateInvoice(CreateInvoiceRequest) returns (CreateInvoiceResponse);
+
+  // Retrieves an invoice by ID
+  rpc GetInvoice(GetInvoiceRequest) returns (GetInvoiceResponse);
+
+  // Lists invoices with optional filtering and pagination
+  rpc ListInvoices(ListInvoicesRequest) returns (ListInvoicesResponse);
+
+  // Updates an existing invoice
+  rpc UpdateInvoice(UpdateInvoiceRequest) returns (UpdateInvoiceResponse);
+
+  // Deletes an invoice
+  rpc DeleteInvoice(DeleteInvoiceRequest) returns (DeleteInvoiceResponse);
+}
