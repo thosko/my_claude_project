@@ -63,7 +63,7 @@ Security infrastructure lives in `security/` and integrates at the `api/` bounda
 ## Project Structure
 
 ```
-src/main/java/se/kleer/invoice/
+src/main/java/se/ts/invoice/
 ├── Application.java
 ├── api/
 │   └── InvoiceGrpcService.java          # gRPC endpoint implementation
@@ -119,7 +119,9 @@ AuthTenantInterceptor
       ├── 3. On success: extract TokenClaims { subject, tenantId, roles }
       │
       ├── 4. Expand roles → permissions via PermissionResolver
-      │         e.g. ADMIN → [INVOICE_READ, INVOICE_CREATE, INVOICE_UPDATE, INVOICE_DELETE]
+      │         e.g. ADMIN     → [INVOICE_READ, INVOICE_READ_ALL, INVOICE_CREATE, INVOICE_UPDATE, INVOICE_DELETE]
+      │             MANAGER   → [INVOICE_READ_ALL, INVOICE_CREATE, INVOICE_UPDATE]
+      │             EMPLOYEE  → [INVOICE_READ]
       │
       ├── 5. Set Spring SecurityContext (subject + permissions)
       │
@@ -142,19 +144,26 @@ If the token is missing, malformed, or invalid, the interceptor closes the call 
 Authorization checks are **permission-based**, not role-based. Service methods are guarded by `@PreAuthorize` annotations that check for specific permissions:
 
 ```java
-@PreAuthorize("hasAuthority('INVOICE_READ')")
+// EMPLOYEE sees their own-scope invoices; MANAGER sees all
+@PreAuthorize("hasAuthority('INVOICE_READ') or hasAuthority('INVOICE_READ_ALL')")
+@PreAuthorize("hasAuthority('INVOICE_READ_ALL')")  // list all — manager only
 @PreAuthorize("hasAuthority('INVOICE_CREATE')")
 @PreAuthorize("hasAuthority('INVOICE_UPDATE')")
 @PreAuthorize("hasAuthority('INVOICE_DELETE')")
 ```
 
+Permissions encode the access scope directly — `INVOICE_READ` is restricted (own scope),
+`INVOICE_READ_ALL` is full (all tenant data). Service methods check permissions only;
+they never inspect role names.
+
 Roles are named bundles of permissions defined in `Role.java`:
 
-| Role | INVOICE_READ | INVOICE_CREATE | INVOICE_UPDATE | INVOICE_DELETE |
-|---|:---:|:---:|:---:|:---:|
-| `ADMIN` | yes | yes | yes | yes |
-| `MANAGER` | yes | yes | yes | no |
-| `USER` | no | no | no | no |
+| Role | INVOICE_READ | INVOICE_READ_ALL | INVOICE_CREATE | INVOICE_UPDATE | INVOICE_DELETE |
+|---|:---:|:---:|:---:|:---:|:---:|
+| `ADMIN` | yes | yes | yes | yes | yes |
+| `MANAGER` | no | yes | yes | yes | no |
+| `EMPLOYEE` | yes | no | no | no | no |
+| `USER` | no | no | no | no | no |
 
 **Adding a new role** requires one change only — a new enum constant in `Role.java` with its permission set. No service method guards ever need updating.
 
@@ -245,9 +254,10 @@ Examples:
 | Token | Tenant | User | Access |
 |---|---|---|---|
 | `tenant-abc\|user-1\|ADMIN` | tenant-abc | user-1 | Full access |
-| `tenant-abc\|user-2\|MANAGER` | tenant-abc | user-2 | Read, create, update |
-| `tenant-abc\|user-3\|USER` | tenant-abc | user-3 | No invoice access |
-| `tenant-xyz\|user-4\|ADMIN` | tenant-xyz | user-4 | Full access, isolated from tenant-abc |
+| `tenant-abc\|user-2\|MANAGER` | tenant-abc | user-2 | Read all, create, update |
+| `tenant-abc\|user-3\|EMPLOYEE` | tenant-abc | user-3 | Restricted read only |
+| `tenant-abc\|user-4\|USER` | tenant-abc | user-4 | No invoice access |
+| `tenant-xyz\|user-5\|ADMIN` | tenant-xyz | user-5 | Full access, isolated from tenant-abc |
 
 ### Running without Security
 
@@ -282,7 +292,7 @@ Install [grpcurl](https://github.com/fullstorydev/grpcurl), then call `CreateInv
 ```bash
 grpcurl \
   -plaintext \
-  -H 'authorization: Bearer tenant-abc|user-1|ADMIN' \
+  -H 'authorization: Bearer tenant-abc|user-1|MANAGER' \
   -d '{
     "customer_id": "cust-001",
     "customer_name": "Acme Corp",
