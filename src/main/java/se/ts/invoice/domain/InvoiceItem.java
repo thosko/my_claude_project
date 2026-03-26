@@ -1,4 +1,4 @@
-package se.kleer.invoice.domain;
+package se.ts.invoice.domain;
 
 public class InvoiceItem {
 

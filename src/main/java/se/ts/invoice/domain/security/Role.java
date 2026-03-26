@@ -1,4 +1,4 @@
-package se.kleer.invoice.domain.security;
+package se.ts.invoice.domain.security;
 
 import java.util.Collections;
 import java.util.EnumSet;

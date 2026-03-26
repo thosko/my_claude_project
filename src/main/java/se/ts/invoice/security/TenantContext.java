@@ -1,4 +1,4 @@
-package se.kleer.invoice.security;
+package se.ts.invoice.security;
 
 /**
  * Thread-local holder for the current tenant identifier.

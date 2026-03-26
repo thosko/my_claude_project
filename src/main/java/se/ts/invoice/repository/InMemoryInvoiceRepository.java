@@ -1,7 +1,7 @@
-package se.kleer.invoice.repository;
+package se.ts.invoice.repository;
 
 import org.springframework.stereotype.Repository;
-import se.kleer.invoice.domain.Invoice;
+import se.ts.invoice.domain.Invoice;
 
 import java.util.List;
 import java.util.Map;

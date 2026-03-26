@@ -1,9 +1,9 @@
 syntax = "proto3";
 
-package se.kleer.invoice.v1;
+package se.ts.invoice.v1;
 
 option java_multiple_files = true;
-option java_package = "se.kleer.invoice.v1.proto";
+option java_package = "se.ts.invoice.v1.proto";
 option java_outer_classname = "InvoiceServiceProto";
 
 import "invoice/v1/invoice_resource.proto";

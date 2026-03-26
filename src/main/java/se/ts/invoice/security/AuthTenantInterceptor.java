@@ -1,4 +1,4 @@
-package se.kleer.invoice.security;
+package se.ts.invoice.security;
 
 import io.grpc.Context;
 import io.grpc.Contexts;
@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import se.kleer.invoice.domain.security.TokenClaims;
+import se.ts.invoice.domain.security.TokenClaims;
 
 /**
  * gRPC server interceptor that authenticates each request and establishes the tenant context.

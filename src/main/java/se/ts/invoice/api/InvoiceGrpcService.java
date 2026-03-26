@@ -1,16 +1,16 @@
-package se.kleer.invoice.api;
+package se.ts.invoice.api;
 
 import com.google.protobuf.Timestamp;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
-import se.kleer.invoice.domain.Invoice;
-import se.kleer.invoice.domain.InvoiceItem;
-import se.kleer.invoice.security.TenantContext;
-import se.kleer.invoice.service.InvoiceService;
-import se.kleer.invoice.v1.proto.CreateInvoiceRequest;
-import se.kleer.invoice.v1.proto.CreateInvoiceResponse;
-import se.kleer.invoice.v1.proto.InvoiceServiceGrpc;
-import se.kleer.invoice.v1.proto.InvoiceStatus;
+import se.ts.invoice.domain.Invoice;
+import se.ts.invoice.domain.InvoiceItem;
+import se.ts.invoice.security.TenantContext;
+import se.ts.invoice.service.InvoiceService;
+import se.ts.invoice.v1.proto.CreateInvoiceRequest;
+import se.ts.invoice.v1.proto.CreateInvoiceResponse;
+import se.ts.invoice.v1.proto.InvoiceServiceGrpc;
+import se.ts.invoice.v1.proto.InvoiceStatus;
 
 import java.time.Instant;
 import java.util.List;
@@ -50,7 +50,7 @@ public class InvoiceGrpcService extends InvoiceServiceGrpc.InvoiceServiceImplBas
         responseObserver.onCompleted();
     }
 
-    private InvoiceItem toDomainItem(se.kleer.invoice.v1.proto.InvoiceItem protoItem) {
+    private InvoiceItem toDomainItem(se.ts.invoice.v1.proto.InvoiceItem protoItem) {
         return new InvoiceItem(
                 protoItem.getId().isEmpty() ? UUID.randomUUID().toString() : protoItem.getId(),
                 protoItem.getDescription(),
@@ -59,8 +59,8 @@ public class InvoiceGrpcService extends InvoiceServiceGrpc.InvoiceServiceImplBas
         );
     }
 
-    private se.kleer.invoice.v1.proto.Invoice toProtoInvoice(Invoice invoice) {
-        se.kleer.invoice.v1.proto.Invoice.Builder builder = se.kleer.invoice.v1.proto.Invoice.newBuilder()
+    private se.ts.invoice.v1.proto.Invoice toProtoInvoice(Invoice invoice) {
+        se.ts.invoice.v1.proto.Invoice.Builder builder = se.ts.invoice.v1.proto.Invoice.newBuilder()
                 .setId(invoice.getId())
                 .setInvoiceNumber(invoice.getInvoiceNumber())
                 .setCustomerId(invoice.getCustomerId())
@@ -82,8 +82,8 @@ public class InvoiceGrpcService extends InvoiceServiceGrpc.InvoiceServiceImplBas
         return builder.build();
     }
 
-    private se.kleer.invoice.v1.proto.InvoiceItem toProtoItem(InvoiceItem item) {
-        return se.kleer.invoice.v1.proto.InvoiceItem.newBuilder()
+    private se.ts.invoice.v1.proto.InvoiceItem toProtoItem(InvoiceItem item) {
+        return se.ts.invoice.v1.proto.InvoiceItem.newBuilder()
                 .setId(item.getId())
                 .setDescription(item.getDescription())
                 .setQuantity(item.getQuantity())
@@ -92,7 +92,7 @@ public class InvoiceGrpcService extends InvoiceServiceGrpc.InvoiceServiceImplBas
                 .build();
     }
 
-    private InvoiceStatus toProtoStatus(se.kleer.invoice.domain.InvoiceStatus status) {
+    private InvoiceStatus toProtoStatus(se.ts.invoice.domain.InvoiceStatus status) {
         return switch (status) {
             case DRAFT -> InvoiceStatus.INVOICE_STATUS_DRAFT;
             case SENT -> InvoiceStatus.INVOICE_STATUS_SENT;

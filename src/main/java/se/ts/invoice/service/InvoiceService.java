@@ -1,11 +1,11 @@
-package se.kleer.invoice.service;
+package se.ts.invoice.service;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-import se.kleer.invoice.domain.Invoice;
-import se.kleer.invoice.domain.InvoiceItem;
-import se.kleer.invoice.domain.InvoiceStatus;
-import se.kleer.invoice.repository.InvoiceRepository;
+import se.ts.invoice.domain.Invoice;
+import se.ts.invoice.domain.InvoiceItem;
+import se.ts.invoice.domain.InvoiceStatus;
+import se.ts.invoice.repository.InvoiceRepository;
 
 import java.time.Instant;
 import java.util.List;

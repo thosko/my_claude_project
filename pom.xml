@@ -11,7 +11,7 @@
         <relativePath/>
     </parent>
 
-    <groupId>se.kleer</groupId>
+    <groupId>se.ts</groupId>
     <artifactId>my_claude_project</artifactId>
     <version>1.0-SNAPSHOT</version>
 

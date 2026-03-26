@@ -1,6 +1,6 @@
-package se.kleer.invoice.security;
+package se.ts.invoice.security;
 
-import se.kleer.invoice.domain.security.TokenClaims;
+import se.ts.invoice.domain.security.TokenClaims;
 
 /**
  * Contract for validating authentication tokens and extracting claims.

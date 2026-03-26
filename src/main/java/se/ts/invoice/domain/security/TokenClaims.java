@@ -1,4 +1,4 @@
-package se.kleer.invoice.domain.security;
+package se.ts.invoice.domain.security;
 
 import java.util.Set;
 
@@ -8,7 +8,7 @@ import java.util.Set;
  *
  * <p>This is a pure domain record — it has no dependency on any token format
  * (JWT, opaque token, etc.) and is populated by
- * {@link se.kleer.invoice.security.TokenValidator}.
+ * {@link se.ts.invoice.security.TokenValidator}.
  * When Keycloak is introduced, its validator maps Keycloak JWT claims into
  * this record; the rest of the system remains unchanged.</p>
  *

@@ -1,4 +1,4 @@
-package se.kleer.invoice.domain.security;
+package se.ts.invoice.domain.security;
 
 /**
  * Defines the fine-grained permissions available in the system.

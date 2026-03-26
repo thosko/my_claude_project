@@ -1,9 +1,9 @@
-package se.kleer.invoice.security;
+package se.ts.invoice.security;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
-import se.kleer.invoice.domain.security.Role;
+import se.ts.invoice.domain.security.Role;
 
 import java.util.Collection;
 import java.util.Set;

@@ -1,4 +1,4 @@
-package se.kleer.invoice.security;
+package se.ts.invoice.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -12,7 +12,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
  * before each service method is invoked.</p>
  *
  * <p>{@code @EnableMethodSecurity} activates {@code @PreAuthorize} support on
- * Spring-managed beans (e.g. {@link se.kleer.invoice.service.InvoiceService}).</p>
+ * Spring-managed beans (e.g. {@link se.ts.invoice.service.InvoiceService}).</p>
  */
 @Configuration
 @EnableMethodSecurity

@@ -1,12 +1,12 @@
-package se.kleer.invoice.security;
+package se.ts.invoice.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Component;
-import se.kleer.invoice.domain.security.Role;
-import se.kleer.invoice.domain.security.TokenClaims;
+import se.ts.invoice.domain.security.Role;
+import se.ts.invoice.domain.security.TokenClaims;
 
 import java.util.Arrays;
 import java.util.Set;
