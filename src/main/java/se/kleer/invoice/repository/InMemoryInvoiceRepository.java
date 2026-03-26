@@ -3,11 +3,18 @@ package se.kleer.invoice.repository;
 import org.springframework.stereotype.Repository;
 import se.kleer.invoice.domain.Invoice;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
+/**
+ * In-memory implementation of {@link InvoiceRepository}.
+ * All reads are tenant-scoped — a lookup for an invoice that belongs to a different
+ * tenant returns empty, providing the same isolation guarantee a real database would.
+ */
 @Repository
 public class InMemoryInvoiceRepository implements InvoiceRepository {
 
@@ -23,8 +30,16 @@ public class InMemoryInvoiceRepository implements InvoiceRepository {
     }
 
     @Override
-    public Optional<Invoice> findById(String id) {
-        return Optional.ofNullable(invoices.get(id));
+    public Optional<Invoice> findById(String id, String tenantId) {
+        return Optional.ofNullable(invoices.get(id))
+                .filter(invoice -> tenantId.equals(invoice.getTenantId()));
+    }
+
+    @Override
+    public List<Invoice> findAllByTenantId(String tenantId) {
+        return invoices.values().stream()
+                .filter(invoice -> tenantId.equals(invoice.getTenantId()))
+                .collect(Collectors.toList());
     }
 
     @Override

@@ -7,6 +7,7 @@ import java.util.List;
 public class Invoice {
 
     private String id;
+    private String tenantId;
     private String invoiceNumber;
     private String customerId;
     private String customerName;
@@ -42,6 +43,24 @@ public class Invoice {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    /**
+     * Returns the tenant this invoice belongs to.
+     *
+     * @return the tenant identifier
+     */
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    /**
+     * Sets the tenant this invoice belongs to.
+     *
+     * @param tenantId the tenant identifier
+     */
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
     }
 
     public String getInvoiceNumber() {

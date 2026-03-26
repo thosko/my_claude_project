@@ -5,6 +5,7 @@ import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 import se.kleer.invoice.domain.Invoice;
 import se.kleer.invoice.domain.InvoiceItem;
+import se.kleer.invoice.security.TenantContext;
 import se.kleer.invoice.service.InvoiceService;
 import se.kleer.invoice.v1.proto.CreateInvoiceRequest;
 import se.kleer.invoice.v1.proto.CreateInvoiceResponse;
@@ -32,6 +33,7 @@ public class InvoiceGrpcService extends InvoiceServiceGrpc.InvoiceServiceImplBas
                 .toList();
 
         Invoice invoice = invoiceService.createInvoice(
+                TenantContext.getTenantId(),
                 request.getCustomerId(),
                 request.getCustomerName(),
                 toInstant(request.getIssueDate()),
